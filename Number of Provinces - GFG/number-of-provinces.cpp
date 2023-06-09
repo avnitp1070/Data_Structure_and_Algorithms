@@ -11,9 +11,16 @@ class Solution {
   
     void dfs(int x,vector<int>&vis,vector<int>adj[]){
         vis[x]=1;
-        for(auto child:adj[x]){
-            if(vis[child]==0)
-            dfs(child,vis,adj);
+        queue<int>q;
+        q.push(x);
+        while(!q.empty()){
+            auto u=q.front();q.pop();
+            for(auto child:adj[u]){
+                if(vis[child]==0){
+                    vis[child]=1;
+                    q.push(child);
+                }
+            }
         }
     }
     int numProvinces(vector<vector<int>> v, int V) {
