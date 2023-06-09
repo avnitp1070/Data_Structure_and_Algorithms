@@ -3,59 +3,51 @@
 using namespace std;
 
 // } Driver Code Ends
+
+#define pii pair<int,int>
+#define f first
+#define se second
 class Solution {
   public:
     // Function to find the number of islands.
     int dx[8]={-1,0,1,0,1,1,-1,-1};
     int dy[8]={0,1,0,-1,1,-1,-1,1};
     
-    // void dfs(int x,int y,vector<vector<char>>& grid){
-    //     if(x<0 || x>=grid.size() || y<0 || y>=grid[0].size() ){
-    //         return;
-    //     }
-    //     if(grid[x][y]=='0' || grid[x][y]=='2'){
-    //         return;
-    //     }
-    //     grid[x][y]='2';
-    //     for(int i=0;i<4;i++){
-    //         int xx=dx[i]+x;
-    //         int yy=y+dy[i];
-    //         dfs(xx,yy,grid);
-    //     }
-    // }
-    
-    void dfs(int x,int y,vector<vector<char>>&grid){
-        if(x>grid.size()-1 || x<0 || y>grid[0].size()-1 || y<0){
-            return;
-        }
-        if(grid[x][y]=='0' || grid[x][y]=='2'){
-            return;
-        }
+    void bfs(int x,int y,vector<vector<char>>& grid){
         grid[x][y]='2';
-        for(int i=0;i<8;i++){
-            dfs(x+dx[i],y+dy[i],grid);
+        queue<pair<int,int>>q;
+        q.push({x,y});  
+        
+        while(!q.empty()){
+            auto vv=q.front();q.pop();
+            int xp=vv.f;
+            int yp=vv.se;
+            for(int i=0;i<8;i++){
+               int xx=xp+dx[i];
+               int yy=yp+dy[i];
+               if(xx>grid.size()-1 || xx<0 || yy>grid[0].size()-1 || yy<0){
+                 continue;
+                }
+               if(grid[xx][yy]=='0' || grid[xx][yy]=='2'){
+                 continue;
+               }
+               if(grid[xx][yy]=='1'){
+                   grid[xx][yy]='2';
+                q.push({xx,yy});
+               } 
+            }
         }
     }
     int numIslands(vector<vector<char>>& grid) {
-        // int cnt=0;
-        // for(int i=0;i<grid.size();i++){
-        //     for(int j=0;j<grid[0].size();j++){
-        //         if(grid[i][j]=='1'){
-        //             cnt++;
-        //             dfs(i,j,grid);
-        //         }
-        //     }
-        // }
-        // return cnt;
         
-         int n=grid.size();
+        int n=grid.size();
         int m=grid[0].size();
         int cnt=0;
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
                 if(grid[i][j]=='1'){
                     cnt++;
-                    dfs(i,j,grid);
+                    bfs(i,j,grid);
                 }
             }
         }
