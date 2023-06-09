@@ -9,39 +9,53 @@ using namespace std;
 class Solution {
   public:
   
-    void dfs(int x,vector<int>&vis,vector<int>adj[]){
-        vis[x]=1;
-        queue<int>q;
-        q.push(x);
-        while(!q.empty()){
-            auto u=q.front();q.pop();
-            for(auto child:adj[u]){
-                if(vis[child]==0){
-                    vis[child]=1;
-                    q.push(child);
-                }
-            }
+   vector<int>parent;
+void make_set(int n){
+    parent.resize(n+5); 
+    for(int i=0;i<n+5;i++){
+     parent[i]=i;
+ }
+}
+int find(int x){
+       if( parent[x] == x) {
+            return x;
         }
+       return parent[x]=find(parent[x]);
     }
-    int numProvinces(vector<vector<int>> v, int V) {
-        int cnt=0;
-        int n=v.size();
-         vector<int>adj[n+1];
+
+bool union_set(int x,int y){
+        int p=find(x);
+        int q=find(y);
+        if(p==q){
+            return true;
+        }
+        parent[p]=q;
+        return false;
+    }
+    int numProvinces(vector<vector<int>> v, int n) {
+        //int n=v.size();
+        int cnt=n;
+        make_set(n);
         for(int i=0;i<v.size();i++){
             for(int j=0;j<v[0].size();j++){
                 if(v[i][j]){
-                    adj[i].push_back(j);
-                    adj[j].push_back(i);
+                    if(find(i)==find(j)){
+                        //cnt--;
+                    }
+                    else{
+                        cnt--;
+                    }
+                    union_set(i,j);
                 }
             }
         }
-        vector<int>vis(n+1,0);
-        for(int i=0;i<n;i++){
-            if(vis[i]==0){
-                cnt++;
-                dfs(i,vis,adj);
-            }
-        }
+        // vector<int>vis(n+1,0);
+        // for(int i=0;i<n;i++){
+        //     if(vis[i]==0){
+        //         cnt++;
+        //         dfs(i,vis,adj);
+        //     }
+        // }
         return cnt;
     }
 };
