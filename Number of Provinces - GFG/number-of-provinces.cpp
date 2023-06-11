@@ -33,22 +33,19 @@ bool union_set(int x,int y){
         return false;
     }
     int numProvinces(vector<vector<int>> v, int n) {
-        //int n=v.size();
-        int cnt=n;
-        make_set(n);
+        make_set(n*n);
         for(int i=0;i<v.size();i++){
             for(int j=0;j<v[0].size();j++){
-                if(v[i][j]){
-                    if(find(i)==find(j)){
-                        //cnt--;
-                    }
-                    else{
-                        cnt--;
-                    }
+                if(v[i][j]==1){
                     union_set(i,j);
                 }
             }
         }
+        unordered_set<int>s;
+        for(int i=0;i<n;i++){
+                s.insert(find(i));
+            }
+        
         // vector<int>vis(n+1,0);
         // for(int i=0;i<n;i++){
         //     if(vis[i]==0){
@@ -56,6 +53,7 @@ bool union_set(int x,int y){
         //         dfs(i,vis,adj);
         //     }
         // }
+        int cnt=s.size();
         return cnt;
     }
 };
