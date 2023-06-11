@@ -22,10 +22,34 @@ public:
             dfs(xx,yy,image,ans,inicol,col);
         }
     }
+    
+    void bfs(int xx,int yy,vector<vector<int>>& image,vector<vector<int>>&ans,int inicol,int col){
+        queue<pair<int,int>>q;
+        q.push({xx,yy});
+        ans[xx][yy]=col;
+        while(!q.empty()){
+          auto p=q.front();q.pop();
+          int a=p.first;
+          int b=p.second;
+          for(int i=0;i<4;i++){
+            int x=a+dx[i];
+            int y=b+dy[i];
+            
+            if(x<0 || x>=image.size() || y<0 || y>=image[0].size() || image[x][y]!=inicol){
+             continue;
+             }
+             if(ans[x][y]==col){
+                 continue;
+             }
+             ans[x][y]=col;
+             q.push({x,y});
+        }
+        }
+    }
     vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
         // Code here 
         vector<vector<int>> ans=image;
-        dfs(sr,sc,image,ans,image[sr][sc],newColor);
+        bfs(sr,sc,image,ans,image[sr][sc],newColor);
         return ans;
     }
 };
