@@ -12,10 +12,21 @@ class Solution {
   public:
     int dx[4]={-1,0,1,0};
     int dy[4]={0,1,0,-1};
-    void bfs(int i, int j,int n, int m, vector<vector<int>> &vis,vector<vector<int>> &grid){
-        vis[i][j]=1;
+    
+    int numberOfEnclaves(vector<vector<int>> &grid) {
+        int n=grid.size();
+        int m=grid[0].size();
+        vector<vector<int>>vis(n,vector<int>(m,0));
         queue<pair<int,int>>q;
-        q.push({i,j});
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]==1 && vis[i][j]==0){
+                  if(i==0 || i==n-1 || j==0 || j==m-1 )
+                  q.push({i,j}), vis[i][j]=1;;
+                }
+            }
+        }
+        
         while(!q.empty()){
             auto p=q.front();q.pop();
             int a=p.first;
@@ -30,22 +41,7 @@ class Solution {
             q.push({x,y});
         }
         }
-    }
-    
-    
-    
-    int numberOfEnclaves(vector<vector<int>> &grid) {
-        int n=grid.size();
-        int m=grid[0].size();
-        vector<vector<int>>vis(n,vector<int>(m,0));
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                if(grid[i][j]==1 && vis[i][j]==0){
-                  if(i==0 || i==n-1 || j==0 || j==m-1 )
-                  bfs(i,j,n,m,vis,grid);
-                }
-            }
-        }
+        
         int cnt=0;
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
