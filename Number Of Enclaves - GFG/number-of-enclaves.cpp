@@ -28,7 +28,9 @@ class Solution {
         }
         
         while(!q.empty()){
-            auto p=q.front();q.pop();
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                auto p=q.front();q.pop();
             int a=p.first;
             int b=p.second;
             for(int k=0;k<4;k++){
@@ -39,7 +41,9 @@ class Solution {
             	}
             vis[x][y]=1;
             q.push({x,y});
-        }
+            }
+            }
+            
         }
         
         int cnt=0;
