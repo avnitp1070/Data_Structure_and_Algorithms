@@ -48,7 +48,7 @@ public:
             }
             for (int i = 0; i < word.size(); i++){   
                 char original = word[i];
-                for (int j=0;j<25;j++){
+                for (int j=0;j<=25;j++){
                     char c=j+'a';
                     word[i] = c;
                     if (st.count(word) > 0) { 
