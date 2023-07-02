@@ -1,0 +1,34 @@
+//{ Driver Code Starts
+// Initial Template for C++
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+// User function Template for C++
+class Solution{
+    public:
+    int setSetBit(int x, int y, int l, int r){
+         for(int i=r-1;i>=l-1;i--){
+            int bit_y =(y& (1<<i))?1:0;
+            if(bit_y){
+                x=x | (1<<i);
+            }
+        }
+        return x;
+    }
+};
+
+//{ Driver Code Starts.
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int x, y, l, r;
+        cin>>x>>y>>l>>r;
+        
+        Solution ob;
+        cout<<ob.setSetBit(x, y, l, r)<<"\n";
+    }
+    return 0;
+}
+// } Driver Code Ends
