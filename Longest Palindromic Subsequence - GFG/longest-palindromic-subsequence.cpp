@@ -10,9 +10,9 @@ using namespace std;
 
 class Solution{
   public:
-    int dp[1003][1003];
+    int dp[1001][1001];
     int solve(int n,int m,string &s,string &t){
-        if(n<=0 || m<=0){
+        if(n==0 || m==0){
             return 0;
         }
         if(dp[n][m]!=-1){
@@ -26,12 +26,11 @@ class Solution{
         }
         return dp[n][m];
     }
-    
     int longestPalinSubseq(string s) {
         //code here
+        memset(dp,-1,sizeof(dp));
         string t=s;
         reverse(t.begin(),t.end());
-        memset(dp,-1,sizeof(dp));
         return solve(s.size(),t.size(),s,t);
     }
 };
