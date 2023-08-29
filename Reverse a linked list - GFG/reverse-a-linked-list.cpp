@@ -28,7 +28,7 @@ struct Node
 }
 
 */
-#include <bits/stdc++.h>
+
 class Solution
 {
     public:
@@ -37,22 +37,16 @@ class Solution
     {
         // code here
         // return head of reversed list
-        vector<int>v;
-        Node* temp=head;
-        while(temp!=NULL){
-            v.push_back(temp->data);
-            temp=temp->next;
-        }
-        reverse(v.begin(),v.end());
-        temp=head;
-        int i=0;
-        while(temp!=NULL){
-            temp->data=v[i];
-            i++;
-            temp=temp->next;
-        }
         
-        return head;
+       Node * temp=head;
+       Node* dummy=NULL;
+       while(temp!=NULL){
+           Node* com=temp->next;
+           temp->next=dummy;
+           dummy=temp;
+           temp=com;
+       }
+       return dummy;
     }
     
 };
