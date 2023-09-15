@@ -1,40 +1,40 @@
 class Solution {
 public:
     vector<string> findAllRecipes(vector<string>& rec, vector<vector<string>>& ing, vector<string>& sup) {
-        unordered_map<string,int>m;
+        unordered_map<string,vector<string>>m;
+        unordered_set<string>s;
+        unordered_map<string,int>in;
+        for(int i=0;i<rec.size();i++){
+            in[rec[i]]=0;
+        }
         for(auto x:sup){
-            m[x]++;
+            s.insert(x);
         }
-         unordered_set<string>ans;
-        int t=100;
-        while(t--){
-            for(int i=0;i<rec.size();i++){
-                if(ans.find(rec[i])!=ans.end()){
-                    continue;
-                }
-            int k=1;
-            for(int j=0;j<ing[i].size();j++){
-                if(m.find(ing[i][j])!=m.end()){
-                   
-                }
-                else{
-                    k=0;
-                    break;
-                }
-            }
-            if(k==1){
-                ans.insert(rec[i]);
-                m[rec[i]]++;
-            }
-           }
-            if(ans.size()==rec.size()){
-                break;
+        for(int i=0;i<rec.size();i++){
+             for(int j=0;j<ing[i].size();j++){
+                 if(s.find(ing[i][j])==s.end()){
+                     m[ing[i][j]].push_back(rec[i]);
+                     in[rec[i]]++;
+                 }
+             }
+        }
+         queue<string> q;
+        for(auto x : in){
+            if(x.second == 0){
+                q.push(x.first);
             }
         }
-        vector<string>res;
-        for(auto x:ans){
-            res.push_back(x);
+       vector<string> ans;
+        while(!q.empty()){
+            string tmp = q.front();
+            q.pop();
+            ans.push_back(tmp);
+            for(auto nbr : m[tmp]){
+                in[nbr]--;
+                if(in[nbr] == 0)
+                    q.push(nbr);
+            }
         }
-        return res;
+        return ans;
     }
 };
