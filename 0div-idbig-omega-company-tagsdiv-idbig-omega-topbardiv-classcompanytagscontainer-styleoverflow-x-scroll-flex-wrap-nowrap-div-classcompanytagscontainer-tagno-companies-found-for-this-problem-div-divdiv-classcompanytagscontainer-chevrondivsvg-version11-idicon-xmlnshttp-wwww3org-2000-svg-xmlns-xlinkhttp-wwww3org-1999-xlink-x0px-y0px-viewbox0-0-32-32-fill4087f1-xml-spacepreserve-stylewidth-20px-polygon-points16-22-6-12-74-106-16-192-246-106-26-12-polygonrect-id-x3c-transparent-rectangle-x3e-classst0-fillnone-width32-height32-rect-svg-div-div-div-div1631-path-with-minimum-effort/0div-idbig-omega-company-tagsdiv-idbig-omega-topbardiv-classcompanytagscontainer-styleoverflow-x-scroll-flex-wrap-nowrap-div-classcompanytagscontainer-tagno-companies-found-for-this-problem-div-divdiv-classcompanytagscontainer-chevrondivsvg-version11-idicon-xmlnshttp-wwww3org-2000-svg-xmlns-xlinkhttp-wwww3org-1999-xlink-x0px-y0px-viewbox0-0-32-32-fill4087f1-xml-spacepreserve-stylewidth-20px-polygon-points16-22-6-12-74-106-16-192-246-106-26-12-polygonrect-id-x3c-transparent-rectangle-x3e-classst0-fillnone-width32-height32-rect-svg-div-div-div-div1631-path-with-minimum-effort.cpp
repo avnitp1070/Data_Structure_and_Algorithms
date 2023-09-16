@@ -10,39 +10,53 @@ public:
         }
         return 1;
     }
-    
-//     bool check(int mid,vector<vector<int>>&vis,vector<vector<int>>&g){
+   
+    bool check(int mid,vector<vector<int>>& g){
+        queue<pair<int,int>> q;
+        int n=g.size();
+        int m=g[0].size();
         
-//     }
+        vector<vector<int>> vis(n,vector<int>(m,0));
+        q.push({0,0});
+        vis[0][0]=1;
+        while(!q.empty()) {
+            auto node=q.front();
+            q.pop();
+            int x= node.first;
+            int y= node.second;
+            if(x==n-1 && y==m-1) 
+                return 1;
+            for(int i=0;i<4;i++) {
+                int nx=x+dx[i];
+                int ny=y+dy[i];
+                if(isValid(nx,ny,n,m) && vis[nx][ny]==0){
+                    if(abs(g[x][y]-g[nx][ny])> mid) 
+                         continue;
+                    vis[nx][ny]=1;
+                    q.push({nx,ny});
+                }
+            }
+        }
+        
+        return false;
+    }
     
     int minimumEffortPath(vector<vector<int>>& g) {
-        int n=g.size(),m=g[0].size();
-
-        vector<vector<int>>dp(n,vector<int>(m, 1e9));
-        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-
-        pq.push({0, 0}); // First item is effort, second is row * 100 + col
-        while (!pq.empty()) {
-           int effort = pq.top().first;
-           int x = pq.top().second / 100, y = pq.top().second % 100;
-           pq.pop();
-
-           if (x == n - 1 && y == m - 1) 
-               return effort;
-           if (effort >= dp[x][y])
-               continue;
-           dp[x][y] = effort;
-
-           for (int i = 0; i < 4; i++) {
-                int nx=x+dx[i],ny=y+dy[i];
-                
-               if(isValid(nx,ny,n,m)){
-                   int n_effort = max(effort, abs(g[x][y] - g[nx][ny]));
-                   pq.push({n_effort, nx * 100 + ny});
-               }
-          }
+        
+        int l = 0;
+        int r= 1e9;
+        int ans = INT_MAX;
+        while(l<=r) {
+            int mid =l+(r-l)/2;
+            
+            if(check(mid,g)) {
+                r=mid-1;
+                ans=min(ans,mid);
+            } else {
+                l=mid+1;
+            }
         }
-       return -1;
-       
+        
+        return ans;
     }
 };
