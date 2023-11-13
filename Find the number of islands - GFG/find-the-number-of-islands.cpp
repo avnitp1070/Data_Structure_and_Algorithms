@@ -3,51 +3,40 @@
 using namespace std;
 
 // } Driver Code Ends
-
-#define pii pair<int,int>
-#define f first
-#define se second
 class Solution {
   public:
     // Function to find the number of islands.
-    int dx[8]={-1,0,1,0,1,1,-1,-1};
-    int dy[8]={0,1,0,-1,1,-1,-1,1};
+    int dx[8]={1,-1,0,0,1,-1,1,-1};
+    int dy[8]={0,0,1,-1,1,1,-1,-1};
+    bool isValid(int x,int y,int n,int m){
+        if(x<0 || x>=n || y<0 || y>=m){
+            return 0;
+        }
+        return 1;
+    }
     
-    void bfs(int x,int y,vector<vector<char>>& grid){
-        grid[x][y]='2';
-        queue<pair<int,int>>q;
-        q.push({x,y});  
-        
-        while(!q.empty()){
-            auto vv=q.front();q.pop();
-            int xp=vv.f;
-            int yp=vv.se;
-            for(int i=0;i<8;i++){
-               int xx=xp+dx[i];
-               int yy=yp+dy[i];
-               if(xx>grid.size()-1 || xx<0 || yy>grid[0].size()-1 || yy<0){
-                 continue;
-                }
-               if(grid[xx][yy]=='0' || grid[xx][yy]=='2'){
-                 continue;
-               }
-               if(grid[xx][yy]=='1'){
-                   grid[xx][yy]='2';
-                q.push({xx,yy});
-               } 
+    void dfs(int x,int y,vector<vector<int>>&vis,vector<vector<char>>&g){
+        vis[x][y]=1;
+        for(int i=0;i<8;i++){
+            int nx=x+dx[i];
+            int ny=y+dy[i];
+            if(isValid(nx,ny,g.size(),g[0].size())==0){
+                continue;
+            }
+            if(vis[nx][ny]==0 && g[nx][ny]=='1'){
+                dfs(nx,ny,vis,g);
             }
         }
     }
-    int numIslands(vector<vector<char>>& grid) {
-        
-        int n=grid.size();
-        int m=grid[0].size();
+    
+    int numIslands(vector<vector<char>>& g) {
+        vector<vector<int>>vis(g.size()+1,vector<int>(g[0].size()+1,0));
         int cnt=0;
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                if(grid[i][j]=='1'){
+        for(int i=0;i<g.size();i++){
+            for(int j=0;j<g[0].size();j++){
+                if(vis[i][j]==0 && g[i][j]=='1'){
                     cnt++;
-                    bfs(i,j,grid);
+                    dfs(i,j,vis,g);
                 }
             }
         }
