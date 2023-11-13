@@ -6,31 +6,48 @@ using namespace std;
 class Solution {
   public:
     // Function to detect cycle in an undirected graph.
-    bool dfs(int x,int par,vector<int>&vis,vector<int>adj[]){
-      vis[x]=1;
-      for(auto child:adj[x]){
-          if(vis[child]==0){
-              if(dfs(child,x,vis,adj)==1){
-                  return 1;
-              }
-          }
-          else {
-              if(child!=par){
-                return 1;
-               }
-          }
-      }
-      return 0;
+    vector<int>parent;
+    void make_set(int n){
+        parent.resize(n+5);
+        for(int i=0;i<n+5;i++){
+            parent[i]=i;
+        }
     }
-    bool isCycle(int n, vector<int> adj[]) {
-       vector<int>vis(n+1,0);
-       for(int i=0;i<n;i++){
-           if(vis[i]==0)
-           if(dfs(i,-1,vis,adj)){
-               return 1;
-           }
+    
+    int find(int x){
+        if(parent[x]==x){
+            return x;
+        }
+        return parent[x]=find(parent[x]);
+    }
+    
+    bool union_set(int x,int y){
+       x=find(x);
+       y=find(y);
+       
+       if(x==y){
+           return true;
        }
-       return 0;
+       parent[x]=y;
+       return false;
+    }
+    
+    bool isCycle(int n, vector<int> adj[]) {
+       make_set(n);
+       vector<int>vis(n+1,0);
+        for(int i=0;i<n;i++){
+            int x=i;
+            vis[i]=1;
+            for(auto y:adj[x]){
+                
+                if(find(x)==find(y)){
+                    if( vis[y]==0)
+                    return 1;
+                }
+                bool b=union_set(x,y);
+            }
+        }
+        return 0;
     }
 };
 
