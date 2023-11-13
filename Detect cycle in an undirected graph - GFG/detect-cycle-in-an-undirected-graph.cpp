@@ -41,7 +41,7 @@ class Solution {
             for(auto y:adj[x]){
                 
                 if(find(x)==find(y)){
-                    if( vis[y]==0)
+                  if(y>i)
                     return 1;
                 }
                 bool b=union_set(x,y);
