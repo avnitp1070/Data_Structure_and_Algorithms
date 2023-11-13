@@ -15,18 +15,28 @@ class Solution {
         return 1;
     }
     
-    void dfs(int x,int y,vector<vector<int>>&vis,vector<vector<char>>&g){
-        vis[x][y]=1;
-        for(int i=0;i<8;i++){
+    void bfs(int srx,int sry,vector<vector<int>>&vis,vector<vector<char>>&g){
+        queue<pair<int,int>>q;
+        q.push({srx,sry});
+        vis[srx][sry]=1;
+        
+        while(!q.empty()){
+            int x=q.front().first;
+            int y=q.front().second;
+            q.pop();
+            for(int i=0;i<8;i++){
             int nx=x+dx[i];
             int ny=y+dy[i];
             if(isValid(nx,ny,g.size(),g[0].size())==0){
                 continue;
             }
             if(vis[nx][ny]==0 && g[nx][ny]=='1'){
-                dfs(nx,ny,vis,g);
+                q.push({nx,ny});
+                vis[nx][ny]=1;
             }
         }
+        }
+        
     }
     
     int numIslands(vector<vector<char>>& g) {
@@ -36,7 +46,7 @@ class Solution {
             for(int j=0;j<g[0].size();j++){
                 if(vis[i][j]==0 && g[i][j]=='1'){
                     cnt++;
-                    dfs(i,j,vis,g);
+                    bfs(i,j,vis,g);
                 }
             }
         }
