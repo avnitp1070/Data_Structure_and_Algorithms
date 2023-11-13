@@ -7,49 +7,33 @@ class Solution {
 public:
     int dx[4]={1,0,-1,0};
     int dy[4]={0,1,0,-1};
-    
-    void dfs(int x,int y,vector<vector<int>>& image,vector<vector<int>>&ans,int inicol,int col){
-        if(x<0 || x>=image.size() || y<0 || y>=image[0].size() || image[x][y]!=inicol){
-            return;
+    bool isValid(int x,int y,int n,int m){
+        if(x<0 || x>=n || y<0 || y>=m){
+            return 0;
         }
-        if(ans[x][y]==col){
-            return;
-        }
-        ans[x][y]=col;
-        for(int i=0;i<4;i++){
-            int xx=x+dx[i];
-            int yy=y+dy[i];
-            dfs(xx,yy,image,ans,inicol,col);
-        }
+        return 1;
     }
-    
-    void bfs(int xx,int yy,vector<vector<int>>& image,vector<vector<int>>&ans,int inicol,int col){
-        queue<pair<int,int>>q;
-        q.push({xx,yy});
-        ans[xx][yy]=col;
-        while(!q.empty()){
-          auto p=q.front();q.pop();
-          int a=p.first;
-          int b=p.second;
-          for(int i=0;i<4;i++){
-            int x=a+dx[i];
-            int y=b+dy[i];
-            
-            if(x<0 || x>=image.size() || y<0 || y>=image[0].size() || image[x][y]!=inicol){
-             continue;
-             }
-             if(ans[x][y]==col){
-                 continue;
-             }
-             ans[x][y]=col;
-             q.push({x,y});
-        }
-        }
-    }
-    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
-        // Code here 
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
         vector<vector<int>> ans=image;
-        bfs(sr,sc,image,ans,image[sr][sc],newColor);
+        queue<pair<int,int>>q;
+        int n=ans.size();
+        int m=ans[0].size();
+        q.push({sr,sc});
+        int c=image[sr][sc];
+        ans[sr][sc]=color;
+        while(!q.empty()){
+            int x=q.front().first;
+            int y=q.front().second;
+            q.pop();
+            for(int i=0;i<4;i++){
+                int nx=x+dx[i];
+                int ny=y+dy[i];
+                if(isValid(nx,ny,n,m) && image[nx][ny]==c && ans[nx][ny]!=color){
+                    ans[nx][ny]=color;
+                    q.push({nx,ny});
+                }
+            }
+        }
         return ans;
     }
 };
