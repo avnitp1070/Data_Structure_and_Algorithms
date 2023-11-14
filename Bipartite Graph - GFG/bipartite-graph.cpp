@@ -5,40 +5,35 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
 public:
-    bool bfs(int p,int c,vector<int>&col,vector<int>&vis,vector<int>adj[]){
-        vis[p]=1;
-        col[p]=c;
-        queue<int>q;
-        q.push(p);
-        while(!q.empty()){
-           int x=q.front();q.pop();
-           
-           for(auto child:adj[x]){
+
+    bool dfs(int x,int c,vector<int>&vis,vector<int>&col,vector<int>adj[]){
+        vis[x]=1;
+        col[x]=c;
+        for(auto child:adj[x]){
             if(vis[child]==0){
-               vis[child]=1;
-               col[child]=col[x]^1;
-               q.push(child);
+                if(dfs(child,c^1,vis,col,adj)==0){
+                    return 0;
+                }
             }
             else{
-                if(col[child]==col[x]){
+                if(col[x]==col[child]){
                     return 0;
                 }
             }
         }
-        }
+        return 1;
         
-        return true;
     }
 	bool isBipartite(int n, vector<int>adj[]){
-	    vector<int>vis(n+1,0);
-	    vector<int>col(n+1,-1);
-	    for(int i=0;i<n;i++){
-	        if(vis[i]==0){
-	            if(bfs(i,0,col,vis,adj)==0){
-	                return 0;
-	            }
-	        }
-	    }
+	    // Code here
+	     vector<int>vis(n+1,0),col(n+1,0);
+	     for(int i=0;i<n;i++){
+	         if(vis[i]==0){
+	             if(dfs(i,0,vis,col,adj)==0){
+	                 return 0;
+	             }
+	         }
+	     }
 	     return 1;
 	}
 
