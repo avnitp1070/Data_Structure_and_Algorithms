@@ -9,43 +9,46 @@ using namespace std;
 
 class Solution {
   public:
-  int dx[4]={1,0,-1,0};
-  int dy[4]={0,1,0,-1};
-   void dfs(int row,int col,vector<vector<int>>&vis,vector<vector<int>>&grid,vector<pair<int,int>>&v, int row0, int col0) {
-        int n = grid.size();
-        int m = grid[0].size();
-        
-        if(row<0 || row>=n || col<0 || col>=m || grid[row][col] == 0 || vis[row][col] == 1) {
-            return ;
+    int dx[4]={1,0,-1,0};
+    int dy[4]={0,1,0,-1};
+    
+    bool isValid(int x,int y,int n,int m){
+        if(x<0 || y<0 || x>=n || y>=m){
+            return 0;
         }
-        
-        vis[row][col] = 1;
-        v.push_back({row - row0, col - col0});
-        
-        for(int i=0;i<4;i++){
-            int nrow=row+dx[i];
-            int ncol=col+dy[i];
-            dfs(nrow,ncol,vis,grid,v,row0,col0);
-        }
+        return 1;
     }
     
-    int countDistinctIslands(vector<vector<int>>& grid) {
+    void dfs(int x,int y,vector<vector<int>>& vis,vector<vector<int>>& g,int x0,int y0,vector<pair<int,int>>&v){
+        vis[x][y]=1;
+        v.push_back({x-x0,y-y0});
         
-        int n = grid.size();
-        int m = grid[0].size();
-        vector<vector<int>> vis(n, vector<int>(m, 0));
-        set<vector<pair<int,int>>> st;
-        
-        for(int i=0; i<n; i++) {
-            for(int j=0; j<m; j++) {
-                if(!vis[i][j] && grid[i][j] == 1) {
-                    vector<pair<int,int>> v;
-                    dfs(i, j, vis, grid, v, i, j);
+        for(int i=0;i<4;i++){
+            int nx=x+dx[i];
+            int ny=y+dy[i];
+            if(isValid(nx,ny,g.size(),g[0].size())==0){
+                continue;
+            }
+            if(vis[nx][ny]==0 && g[nx][ny]==1){
+                dfs(nx,ny,vis,g,x0,y0,v);
+            }
+        }
+    }
+    int countDistinctIslands(vector<vector<int>>& g) {
+        int n=g.size();
+        int m=g[0].size();
+        vector<vector<int>>vis(n+1,vector<int>(m+1,0));
+        set<vector<pair<int,int>>>st;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(vis[i][j]==0 && g[i][j]==1){
+                    vector<pair<int,int>>v;
+                    dfs(i,j,vis,g,i,j,v);
                     st.insert(v);
                 }
             }
         }
-        return st.size();
+        return (int)st.size();
     }
 };
 
